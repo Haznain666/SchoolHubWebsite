@@ -1,0 +1,1284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   DESIGN TOKENS — the single source of truth for colour.
+   Values sampled from the real logo files (see docs/BRIEF.md §3).
+   Each token exists twice: `--x-rgb` (channels, consumed by tailwind.config.ts
+   so that `/opacity` modifiers work) and `--x` (ready-to-use colour).
+   ========================================================================== */
+:root {
+  --ink-rgb: 1 17 46; /* #01112E — THE accent */
+  --ink-soft-rgb: 11 30 61; /* #0B1E3D */
+  --brand-blue-rgb: 0 64 248; /* #0040F8 */
+  --brand-blue-mid-rgb: 0 128 248; /* #0080F8 */
+  --brand-cyan-rgb: 0 224 248; /* #00E0F8 */
+  --paper-rgb: 247 248 250; /* #F7F8FA */
+  --paper-2-rgb: 255 255 255; /* #FFFFFF */
+  --steel-100-rgb: 231 234 239; /* #E7EAEF */
+  --steel-300-rgb: 195 202 212; /* #C3CAD4 */
+  --steel-500-rgb: 138 148 163; /* #8A94A3 */
+  --steel-700-rgb: 74 84 99; /* #4A5463 */
+
+  --ink: rgb(var(--ink-rgb));
+  --ink-soft: rgb(var(--ink-soft-rgb));
+  --accent: rgb(var(--ink-rgb));
+  --brand-blue: rgb(var(--brand-blue-rgb));
+  --brand-blue-mid: rgb(var(--brand-blue-mid-rgb));
+  --brand-cyan: rgb(var(--brand-cyan-rgb));
+  --paper: rgb(var(--paper-rgb));
+  --paper-2: rgb(var(--paper-2-rgb));
+  --steel-100: rgb(var(--steel-100-rgb));
+  --steel-300: rgb(var(--steel-300-rgb));
+  --steel-500: rgb(var(--steel-500-rgb));
+  --steel-700: rgb(var(--steel-700-rgb));
+
+  /* motion */
+  --ease-scene: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* chrome */
+  --chrome-shadow: 0 1px 14px rgba(255, 255, 255, 0.9), 0 0 4px rgba(247, 248, 250, 0.9);
+
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* the fixed header is ~76px; anchor jumps must clear it */
+    scroll-padding-top: 5.5rem;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    /* never flat white, never black — a very soft steel gradient */
+    background-image:
+      radial-gradient(90rem 60rem at 78% -10%, rgba(0, 128, 248, 0.07), transparent 62%),
+      radial-gradient(70rem 50rem at 6% 108%, rgba(1, 17, 46, 0.06), transparent 60%),
+      linear-gradient(176deg, #ffffff 0%, var(--paper) 42%, #eef1f5 100%);
+    background-attachment: fixed;
+    color: var(--steel-700);
+    font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+    font-weight: 300;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgb(var(--ink-rgb) / 0.92);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(var(--paper-rgb)), 0 0 0 3px rgb(var(--ink-rgb) / 0.6);
+    border-radius: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--ink);
+    font-weight: 400;
+  }
+}
+
+/* ==========================================================================
+   TYPOGRAPHY — identical to the inspiration (BRIEF §3)
+   ========================================================================== */
+@layer components {
+  .display {
+    font-family: 'Libre Baskerville', Baskerville, 'Times New Roman', serif;
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  .eyebrow {
+    font-family: Poppins, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 500;
+    font-size: 0.68rem;
+    line-height: 1.4;
+  }
+
+  .body-copy {
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  /* 10.88px of uppercase on 0.28em of tracking is legible on a desktop at
+     arm's length and marginal on a phone, and the eyebrow carries the section
+     numbers and the footer column headings, so it is not decorative. Nudged up
+     and the tracking eased slightly to buy the extra width back. */
+  @media (max-width: 767px) {
+    .eyebrow {
+      font-size: 0.74rem;
+      letter-spacing: 0.22em;
+    }
+  }
+
+  /* light text-shadow scrim so fixed chrome stays readable over the bot */
+  .chrome-legible {
+    text-shadow: var(--chrome-shadow);
+  }
+
+  .scene-heading {
+    font-size: clamp(1.95rem, 4.1vw, 3rem);
+  }
+
+  .hero-display {
+    font-size: clamp(2.8rem, 8.5vw, 7rem);
+  }
+
+  /* ---- CTAs (BRIEF §6) ---------------------------------------------- */
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.625rem 1.25rem;
+    font-family: Poppins, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 500;
+    font-size: 0.6rem;
+    transition:
+      background-color 300ms var(--ease-scene),
+      transform 300ms var(--ease-scene),
+      box-shadow 300ms var(--ease-scene);
+  }
+  .cta-primary:hover {
+    background: var(--brand-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px -12px rgba(1, 17, 46, 0.55);
+  }
+  .cta-primary .cta-arrow {
+    transition: transform 300ms var(--ease-scene);
+  }
+  .cta-primary:hover .cta-arrow {
+    transform: translateX(4px);
+  }
+
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: Poppins, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 500;
+    font-size: 0.6rem;
+    color: var(--steel-700);
+    transition: color 300ms var(--ease-scene);
+  }
+  .cta-secondary:hover {
+    color: var(--accent);
+  }
+
+  /* The pill CTAs are 9.6px uppercase on 0.28em tracking — right at desktop
+     scale, unreadable and under the 44px touch target on a phone. Only the
+     size changes below md; the letterform, the tracking and the colour are
+     the same button. */
+  @media (max-width: 767px) {
+    .cta-primary,
+    .cta-outline {
+      min-height: 2.75rem;
+      padding-inline: 1.4rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+    }
+    .cta-secondary {
+      min-height: 2.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+    }
+  }
+
+  .cta-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--steel-300);
+    background: rgb(var(--paper-2-rgb) / 0.55);
+    color: var(--ink);
+    padding: 0.625rem 1.25rem;
+    font-family: Poppins, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 500;
+    font-size: 0.6rem;
+    transition:
+      border-color 300ms var(--ease-scene),
+      color 300ms var(--ease-scene),
+      transform 300ms var(--ease-scene),
+      background-color 300ms var(--ease-scene);
+  }
+  .cta-outline:hover {
+    border-color: var(--accent);
+    background: rgb(var(--paper-2-rgb) / 0.9);
+    transform: translateY(-1px);
+  }
+
+  .kbd {
+    display: inline-flex;
+    height: 17px;
+    min-width: 17px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    border: 1px solid var(--steel-300);
+    padding: 0 3px;
+    font-family: Poppins, sans-serif;
+    font-size: 0.58rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--steel-700);
+    background: rgb(var(--paper-2-rgb) / 0.7);
+  }
+
+  /* ---- Infographic card hover (BRIEF §5.9) --------------------------- */
+  .info-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--steel-100);
+    border-radius: 0.75rem;
+    background: rgb(var(--paper-2-rgb) / 0.72);
+    padding: 0.95rem 1rem 1.05rem;
+    transition:
+      border-color 450ms var(--ease-scene),
+      background-color 450ms var(--ease-scene),
+      box-shadow 450ms var(--ease-scene),
+      transform 450ms var(--ease-scene);
+    will-change: transform;
+  }
+  .info-card::before {
+    /* pointer-tracked spotlight */
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 450ms var(--ease-scene);
+    background: radial-gradient(
+      16rem 16rem at var(--mx, 50%) var(--my, 50%),
+      rgba(0, 128, 248, 0.13),
+      rgba(0, 224, 248, 0.06) 38%,
+      transparent 68%
+    );
+  }
+  .info-card:hover,
+  .info-card:focus-within {
+    border-color: rgb(var(--ink-rgb) / 0.35);
+    background: rgb(var(--paper-2-rgb) / 1);
+    box-shadow: 0 18px 50px -20px rgba(1, 17, 46, 0.28);
+    transform: translateY(-4px);
+  }
+  .info-card:hover::before,
+  .info-card:focus-within::before {
+    opacity: 1;
+  }
+  .info-card .card-rule {
+    display: block;
+    height: 1px;
+    width: 1rem;
+    background: var(--steel-300);
+    transition:
+      width 450ms var(--ease-scene),
+      background-color 450ms var(--ease-scene);
+  }
+  .info-card:hover .card-rule,
+  .info-card:focus-within .card-rule {
+    width: 3rem;
+    background: var(--accent);
+  }
+  .info-card .card-index {
+    opacity: 0.35;
+    transform: translateY(2px);
+    transition:
+      opacity 450ms var(--ease-scene),
+      transform 450ms var(--ease-scene),
+      color 450ms var(--ease-scene);
+  }
+  .info-card:hover .card-index,
+  .info-card:focus-within .card-index {
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--accent);
+  }
+
+  /* ---- The rule / title / text list (§06 messaging, §08 performance) ---
+     Fewer, longer points than the card grid handles well; see DetailList.tsx.
+     The hover gesture deliberately mirrors `.card-rule` above so the two
+     layouts read as one system rather than two different sites. */
+  .detail-list {
+    position: relative;
+    /* clamps the sheet below to this element's own stacking context, so a
+       z-index of -1 cannot drop it behind the 3D canvas */
+    isolation: isolate;
+  }
+  /* The rows are transparent by design — the reference is rules and text on a
+     bare background. That reference did not have a chrome robot behind it.
+     Measured at 1440px, the model covers ~80% of this column on §06 and ~75%
+     on §08, and the six-card grid these rows replaced was hiding it with an
+     opaque paper panel per card. This is the one surface that does that job
+     without turning the rows back into cards: a single sheet behind the whole
+     list, extended past it, so the metal reads as depth behind glass instead
+     of as texture inside the words. Same frosting as the header pill. */
+  .detail-list::before {
+    content: '';
+    position: absolute;
+    inset: -0.9rem -1.35rem;
+    z-index: -1;
+    border-radius: 1.15rem;
+    background: rgb(var(--paper-2-rgb) / 0.62);
+    backdrop-filter: blur(9px) saturate(1.1);
+    -webkit-backdrop-filter: blur(9px) saturate(1.1);
+  }
+
+  .detail-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0 1.25rem;
+    align-items: start;
+    padding: 1.05rem 0 1.15rem;
+    border-top: 1px solid var(--steel-300);
+    transition: border-color 450ms var(--ease-scene);
+  }
+  .detail-row::before {
+    /* the accent line that wipes across the row's own top border */
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    height: 1px;
+    width: 0;
+    background: var(--accent);
+    transition: width 550ms var(--ease-scene);
+  }
+  .detail-row:hover::before,
+  .detail-row:focus-within::before {
+    width: 100%;
+  }
+  .detail-row .detail-index {
+    padding-top: 0.42rem;
+    opacity: 0.45;
+    transition:
+      opacity 450ms var(--ease-scene),
+      color 450ms var(--ease-scene);
+  }
+  .detail-row:hover .detail-index,
+  .detail-row:focus-within .detail-index {
+    opacity: 1;
+    color: var(--accent);
+  }
+  .detail-row:focus-visible {
+    outline: none;
+  }
+
+  @media (max-width: 767px) {
+    .detail-row .detail-index {
+      opacity: 0.62;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .detail-row {
+      grid-template-columns: 1.9rem minmax(0, 1fr);
+      gap: 0 0.85rem;
+    }
+  }
+
+  /* ---- The header shell ----------------------------------------------
+     On the hero the header is bare chrome floating over the composition. On
+     every other section it draws itself into a frosted pill, so the links keep
+     their contrast once the bot and the artwork are moving underneath them.
+
+     max-width, padding and the surface are all set here rather than with
+     utilities: Tailwind emits its responsive utilities AFTER this file, so a
+     `max-w-7xl` on the element would win over `.nav-shell.is-condensed` at
+     equal specificity and the pill would never narrow. */
+  .nav-shell {
+    max-width: 80rem;
+    margin-top: 0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background: transparent;
+    transition:
+      max-width 760ms var(--ease-scene),
+      margin-top 760ms var(--ease-scene),
+      padding 760ms var(--ease-scene),
+      background-color 760ms var(--ease-scene),
+      border-color 760ms var(--ease-scene),
+      box-shadow 760ms var(--ease-scene),
+      backdrop-filter 760ms var(--ease-scene);
+  }
+  .nav-shell.is-condensed {
+    max-width: 66rem;
+    margin-top: 0.55rem;
+    padding: 0.6rem 1.75rem;
+    border-color: rgb(var(--steel-300-rgb) / 0.55);
+    background: rgb(var(--paper-2-rgb) / 0.55);
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    box-shadow: 0 18px 46px -24px rgba(1, 17, 46, 0.42);
+  }
+  /* The pill's own surface is the contrast the text shadow was faking. */
+  .nav-shell.is-condensed .chrome-legible {
+    text-shadow: none;
+  }
+  /* `mx-auto` is a Tailwind utility and utilities are emitted after this file,
+     so the margin is qualified with the element to clear it on specificity —
+     otherwise the pill keeps `margin-inline: auto` and its rounded corners run
+     into the edges of a 375px screen. */
+  @media (max-width: 767px) {
+    header .nav-shell.is-condensed {
+      margin-inline: 0.85rem;
+      padding: 0.55rem 1.05rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-shell {
+      transition: none;
+    }
+  }
+
+  .panel {
+    border: 1px solid var(--steel-100);
+    border-radius: 0.75rem;
+    background: rgb(var(--paper-2-rgb) / 0.75);
+  }
+}
+
+/* ==========================================================================
+   FIXED SCENERY
+   ========================================================================== */
+/* the four vertical hairlines (BRIEF §5.4) */
+.hairline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--steel-300) 12%,
+    var(--steel-300) 88%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* ---- the scrim (CHANGES-V2 §D.6) ------------------------------------
+   Build 1 washed the whole viewport, which is what made the bot look faded.
+   The gradient now only covers the copy column and stops well before the
+   subject, so the metal reads as metal. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  transition: opacity 620ms var(--ease-scene);
+  /* The copy never reaches the top or bottom of a scene, but the gradient did,
+     so a halo placed high on the copy side sat under near-opaque paper and
+     vanished. Fading the scrim out vertically keeps it where the text actually
+     is and leaves the upper and lower bands clear for the scenery. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.55) 12%,
+    #000 22%,
+    #000 86%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.55) 12%,
+    #000 22%,
+    #000 86%,
+    transparent 100%
+  );
+}
+.scrim-start {
+  background: linear-gradient(
+    100deg,
+    rgba(247, 248, 250, 0.9) 0%,
+    rgba(247, 248, 250, 0.82) 30%,
+    rgba(247, 248, 250, 0.44) 52%,
+    rgba(247, 248, 250, 0) 68%
+  );
+}
+.scrim-end {
+  background: linear-gradient(
+    260deg,
+    rgba(247, 248, 250, 0.9) 0%,
+    rgba(247, 248, 250, 0.82) 30%,
+    rgba(247, 248, 250, 0.44) 52%,
+    rgba(247, 248, 250, 0) 68%
+  );
+}
+.scrim-center {
+  background: linear-gradient(
+    180deg,
+    rgba(247, 248, 250, 0.88) 0%,
+    rgba(247, 248, 250, 0.42) 42%,
+    rgba(247, 248, 250, 0.42) 58%,
+    rgba(247, 248, 250, 0.88) 100%
+  );
+}
+
+/* On a phone there is one column, not two, and the model sits directly behind
+   it. The three washes above run across the width and have faded to nothing by
+   68%, so the right third of every line was left sitting on bare metal. Below
+   the md breakpoint all three become the same full-width vertical wash.
+
+   The alpha is deliberately moderate. The canvas is already at 0.42 there, so
+   the model composites to roughly 0.18 against the paper — a watermark rather
+   than a subject, which is what "reduce the opacity so that the text is
+   visible" asks for. Body copy keeps ~5:1 against the darkest part of the
+   metal at that strength. */
+@media (max-width: 767px) {
+  .scrim-start,
+  .scrim-end,
+  .scrim-center {
+    background: linear-gradient(
+      180deg,
+      rgba(247, 248, 250, 0.72) 0%,
+      rgba(247, 248, 250, 0.58) 30%,
+      rgba(247, 248, 250, 0.58) 74%,
+      rgba(247, 248, 250, 0.72) 100%
+    );
+  }
+}
+
+/* ==========================================================================
+   KEYFRAMES — all transform/opacity only
+   ========================================================================== */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.caret {
+  animation: caret-blink 900ms steps(1, end) infinite;
+}
+
+@keyframes scroll-rule {
+  0% {
+    transform: scaleY(0.15);
+    transform-origin: top;
+    opacity: 0.25;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.15);
+    transform-origin: bottom;
+    opacity: 0.25;
+  }
+}
+.scroll-rule {
+  animation: scroll-rule 2.2s var(--ease-scene) infinite;
+}
+
+/* ---- the neon halo (CHANGES-V2 §F) ----------------------------------
+   Three independent periods that never sync: one turn per 80s, a ±6% scale
+   breath every 12s, and a ±8% core pulse every 4s offset from both. */
+@keyframes halo-spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes halo-breathe {
+  0%,
+  100% {
+    transform: scale(0.94);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+@keyframes halo-pulse {
+  0%,
+  100% {
+    opacity: 0.92;
+    filter: brightness(0.96);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.08);
+  }
+}
+.halo-spin {
+  animation: halo-spin 80s linear infinite;
+}
+.halo-breathe {
+  animation: halo-breathe 12s ease-in-out infinite;
+}
+/* the second, further halo — a longer period and an offset phase, so the two
+   lights never breathe in step and the pair reads as depth, not as a repeat */
+.halo-breathe-slow {
+  animation: halo-breathe 19s ease-in-out infinite;
+  animation-delay: -6s;
+}
+.halo-pulse {
+  animation: halo-pulse 4s ease-in-out infinite;
+  animation-delay: -1.4s;
+}
+
+/* the static-bot fallback keeps its slow float */
+@keyframes bot-float {
+  0%,
+  100% {
+    transform: translateY(-9px);
+  }
+  50% {
+    transform: translateY(9px);
+  }
+}
+.bot-float {
+  animation: bot-float 6s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.05);
+  }
+}
+.glow-pulse {
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 1.4s var(--ease-scene) both;
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(240%);
+  }
+}
+.sweep {
+  animation: sweep 6s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   §G.1 — the isometric plane that bleeds off the top-left corner
+   ========================================================================== */
+.iso-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.iso-plane {
+  position: absolute;
+  /* The origin is deliberately OUTSIDE the viewport, off the left edge, and the
+     plane is never fitted on screen: cards in column 0 are cropped by the left
+     edge and cards in row 0 are cropped by the top edge.
+
+     The offsets are not free parameters. `rotateX(52deg) rotateZ(-38deg)` about
+     `0 0` projects a plane point (x, y) to screen
+         X =  0.788x + 0.616y
+         Y = -0.379x + 0.485y
+     so the plane extends UP and to the right of its origin: over the card grid
+     Y spans only -290px..+267px. Putting the origin 30vh ABOVE the viewport —
+     as build 1 did — therefore pushed all nine cards off the top of the screen,
+     where `.iso-wrap`'s overflow clipped them and the section rendered empty.
+     The origin has to sit below the cards, not above them. */
+  left: -13vw;
+  top: 15vh;
+  width: 980px;
+  height: 660px;
+  transform: rotateX(52deg) rotateZ(-38deg);
+  transform-origin: 0 0;
+  transform-style: preserve-3d;
+}
+
+@media (min-width: 1536px) {
+  /* vw/vh offsets grow with the viewport while the cards stay a fixed size, so
+     on very wide screens the plane is pulled back toward the corner it bleeds
+     from rather than drifting off it */
+  .iso-plane {
+    left: -9vw;
+    top: 13vh;
+  }
+}
+
+/* The feature-scene cards borrow §G.1's drift so the six-card grid has the same
+   quiet life as the platform artwork. Same idea, smaller numbers: these cards
+   carry body copy at a 14px gap, so the amplitude is capped at 6px. Two
+   neighbours drifting toward each other close 12px of that gap and still clear
+   it. The rotation is a third of the plane's for the same reason — text that
+   visibly tilts is text that is harder to read.
+
+   This lives on its own wrapper, not on `.info-card`: a CSS animation beats a
+   normal declaration in the cascade, so putting it on the card itself would
+   permanently win over the `:hover` lift. One element drifts, the one inside
+   it lifts. */
+.card-drift {
+  height: 100%;
+  animation-name: card-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes card-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(6px, -4px, 0) rotate(0.5deg);
+  }
+  66% {
+    transform: translate3d(-5px, 6px, 0) rotate(-0.5deg);
+  }
+}
+
+/* ==========================================================================
+   §09 — the onboarding flow: four steps, connected
+   ==========================================================================
+   The steps cascade down and to the right so every hop has a diagonal to run
+   along. A flat 2x2 grid left the connectors nowhere sensible to go.
+
+   `--flow-step` is the horizontal offset per step and `--flow-gap` the vertical
+   one; the connector is positioned from exactly those two values, so the line
+   always lands on the cards rather than being nudged into place by hand. */
+.process-flow {
+  --flow-step: 5.25rem;
+  --flow-gap: 1.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.process-flow > li {
+  position: relative;
+  max-width: 24rem;
+  margin-left: calc(var(--step) * var(--flow-step));
+}
+
+.process-flow > li + li {
+  margin-top: var(--flow-gap);
+}
+
+.process-link {
+  position: absolute;
+  /* spans the diagonal between the previous card and this one: back one step
+     horizontally, up one gap vertically */
+  left: calc(-1 * var(--flow-step) + 2.5rem);
+  top: calc(-1 * var(--flow-gap));
+  width: var(--flow-step);
+  height: var(--flow-gap);
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* below sm the cards go full width and stack, so the diagonal — and the
+   connector that depends on it — has nothing to describe */
+@media (max-width: 639px) {
+  .process-flow > li {
+    max-width: none;
+    margin-left: 0;
+  }
+  .process-link {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Closing the void between the copy and the bot
+   ==========================================================================
+   Half of each fix is here and half is in the scene preset: the bot slides
+   along the camera's right vector toward the copy, and the copy is pushed back
+   toward the bot with extra padding on its own side. Doing only the first
+   leaves the copy hugging the outer edge on a wide monitor, which is where the
+   void is worst.
+
+   Targets were measured at 1920x950 and aim to leave ~30% of the original gap,
+   with a 90px floor so the two never touch:
+
+     numbers        376px -> 113    how-it-works   170px -> 90
+     performance    430px -> 129    platform       207px -> 90
+     onboarding     236px -> 90
+
+   `section.` qualifies every selector on purpose. Tailwind emits its responsive
+   utilities at the END of the generated stylesheet, so a bare class ties with
+   `xl:pr-[15rem]` on specificity and loses on source order — measured, and the
+   padding silently did nothing. One element qualifier settles it. */
+
+@media (min-width: 1024px) {
+  section.scene-numbers {
+    padding-right: 17rem;
+  }
+  section.scene-how-it-works {
+    padding-left: 14.5rem;
+  }
+  section.scene-performance {
+    padding-left: 17rem;
+  }
+  section.scene-platform {
+    padding-right: 17rem;
+  }
+  section.scene-onboarding {
+    padding-right: 15.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  section.scene-numbers {
+    padding-right: 22.5rem;
+  }
+  section.scene-how-it-works {
+    padding-left: 17.5rem;
+  }
+  section.scene-performance {
+    padding-left: 24rem;
+  }
+  section.scene-platform {
+    padding-right: 19.75rem;
+  }
+  section.scene-onboarding {
+    padding-right: 19rem;
+  }
+}
+
+/* ==========================================================================
+   §09 — the three portal cards take it in turns to light up
+   ==========================================================================
+   Office -> Teaching -> Family, three seconds each, looping, so three seconds
+   after Family lights the cycle is back on Office.
+
+   One 9s timeline shared by all three, offset by a third each through
+   `--cycle-delay`; the highlight occupies the first third of it. Three separate
+   3s animations would drift apart, because nothing keeps independent CSS
+   animations phase-locked once the tab has been throttled.
+
+   The glow is on a `::before` overlay and the growth is on the wrapper, so
+   `.info-card` keeps both its own `transform` and its own `box-shadow` for
+   `:hover`. An animation beats a normal declaration in the cascade, so putting
+   either on the card itself would disable the hover permanently. */
+.portal-cycle {
+  position: relative;
+  height: 100%;
+  animation: portal-grow 9s var(--ease-scene) infinite;
+  animation-delay: var(--cycle-delay, 0s);
+}
+
+.portal-cycle::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 0.875rem;
+  pointer-events: none;
+  opacity: 0;
+  border: 1px solid rgba(0, 224, 248, 0.85);
+  box-shadow:
+    0 0 0 3px rgba(0, 224, 248, 0.12),
+    0 0 26px 3px rgba(0, 224, 248, 0.36),
+    0 18px 46px -22px rgba(1, 17, 46, 0.35);
+  /* custom properties inherit to pseudo-elements, so one value on the wrapper
+     keeps the ring and the growth in step */
+  animation: portal-glow 9s var(--ease-scene) infinite;
+  animation-delay: var(--cycle-delay, 0s);
+}
+
+@keyframes portal-grow {
+  0% {
+    transform: scale(1);
+    z-index: 1;
+  }
+  6%,
+  28% {
+    transform: scale(1.04);
+    z-index: 1;
+  }
+  34% {
+    transform: scale(1);
+    z-index: 1;
+  }
+  35%,
+  100% {
+    transform: scale(1);
+    z-index: 0;
+  }
+}
+
+@keyframes portal-glow {
+  0% {
+    opacity: 0;
+  }
+  6%,
+  28% {
+    opacity: 1;
+  }
+  34%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.iso-card {
+  position: absolute;
+  animation-name: iso-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* the plane breathes rather than sliding: every card runs this on its own
+   period and phase offset, set inline */
+@keyframes iso-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(10px, -6px, 0) rotate(0.8deg);
+  }
+  66% {
+    transform: translate3d(-8px, 9px, 0) rotate(-0.8deg);
+  }
+}
+
+/* below lg the plane would swamp a narrow screen */
+@media (max-width: 1023px) {
+  .iso-wrap {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   §I — the "How it works" node diagram
+   ========================================================================== */
+.scene-diagram {
+  max-width: 44rem;
+}
+.diagram-node {
+  cursor: default;
+  outline: none;
+}
+.diagram-node:focus-visible circle {
+  stroke: var(--brand-blue);
+  stroke-width: 2;
+}
+
+/* ==========================================================================
+   §G.3 — the FAQ panel: glass over the bot, not an accordion
+   ========================================================================== */
+.faq-panel {
+  position: relative;
+  border: 1px solid var(--steel-100);
+  border-radius: 0.9rem;
+  padding: 1.35rem 1.5rem 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(240, 243, 247, 0.62) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 18px 50px -30px rgba(1, 17, 46, 0.3);
+  backdrop-filter: blur(6px);
+}
+
+.faq-question {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.5rem 0;
+  text-align: left;
+  color: var(--steel-500);
+  transition: color 420ms var(--ease-scene);
+}
+.faq-question:hover {
+  color: var(--steel-700);
+}
+.faq-question.is-active {
+  color: var(--ink);
+}
+.faq-question .display {
+  color: inherit;
+}
+.faq-rule {
+  display: block;
+  flex: none;
+  width: 2px;
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--steel-100);
+  transition:
+    background-color 420ms var(--ease-scene),
+    transform 420ms var(--ease-scene);
+  transform: scaleY(0.6);
+}
+.faq-question.is-active .faq-rule {
+  background: var(--accent);
+  transform: scaleY(1);
+}
+
+/* ==========================================================================
+   §G.2 — the bento's looping voucher flag
+   ========================================================================== */
+@keyframes flag-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.voucher-flag {
+  display: inline-block;
+  animation: flag-in 420ms var(--ease-scene) both;
+}
+
+/* ==========================================================================
+   STANDALONE LEGAL PAGES + COOKIE CONSENT
+   These share the tokens and typography with the scenes, but none of the
+   scene machinery: no 3D layer, no scroll state, no presets.
+   ========================================================================== */
+.legal-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 0;
+}
+.legal-main {
+  position: relative;
+  z-index: 10;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 0;
+}
+.legal-note {
+  margin-top: 2rem;
+  max-width: 42rem;
+  border: 1px solid var(--steel-100);
+  border-left: 2px solid rgb(var(--ink-rgb) / 0.45);
+  border-radius: 0.5rem;
+  background: rgb(var(--paper-2-rgb) / 0.8);
+  padding: 0.9rem 1.1rem;
+}
+.legal-section {
+  margin-top: 2.75rem;
+}
+.legal-bullet {
+  position: relative;
+  padding-left: 1.1rem;
+}
+.legal-bullet::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--steel-300);
+}
+.legal-footer {
+  position: relative;
+  z-index: 10;
+  max-width: 64rem;
+  margin: 4.5rem auto 0;
+  padding: 2rem 1.5rem 3rem;
+  border-top: 1px solid var(--steel-100);
+}
+.legal-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+.legal-footer a,
+.legal-footer button {
+  font-family: Poppins, sans-serif;
+  font-weight: 300;
+  font-size: 0.86rem;
+  color: var(--steel-700);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: color 300ms var(--ease-scene);
+}
+.legal-footer a:hover,
+.legal-footer button:hover {
+  color: var(--ink);
+}
+
+/* ---- consent banner ---------------------------------------------------- */
+.consent-banner {
+  position: fixed;
+  z-index: 70;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+}
+.consent-banner-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 56rem;
+  margin: 0 auto;
+  border: 1px solid var(--steel-100);
+  border-radius: 0.9rem;
+  background: rgb(var(--paper-2-rgb) / 0.97);
+  box-shadow: 0 24px 60px -24px rgba(1, 17, 46, 0.4);
+  padding: 1.1rem 1.25rem;
+  backdrop-filter: blur(6px);
+}
+@media (min-width: 768px) {
+  .consent-banner-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+}
+.consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+.consent-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- settings panel ---------------------------------------------------- */
+.consent-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(1, 17, 46, 0.28);
+  backdrop-filter: blur(3px);
+}
+.consent-panel {
+  width: 100%;
+  max-width: 34rem;
+  max-height: 88vh;
+  overflow-y: auto;
+  border: 1px solid var(--steel-100);
+  border-radius: 1rem;
+  background: rgb(var(--paper-2-rgb) / 1);
+  box-shadow: 0 30px 80px -30px rgba(1, 17, 46, 0.5);
+  padding: 1.6rem 1.5rem;
+}
+.consent-row {
+  border: 1px solid var(--steel-100);
+  border-radius: 0.6rem;
+  background: rgb(var(--paper-rgb) / 0.6);
+  padding: 0.8rem 0.9rem;
+  transition: border-color 300ms var(--ease-scene);
+}
+.consent-row:hover {
+  border-color: rgb(var(--ink-rgb) / 0.28);
+}
+.consent-check {
+  margin-top: 0.2rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+  flex: none;
+}
+.consent-check:disabled {
+  opacity: 0.55;
+}
