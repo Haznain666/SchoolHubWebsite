@@ -27,6 +27,12 @@ npm run typecheck
 npm run lint       # eslint --max-warnings 0
 ```
 
+**Repository:** https://github.com/Haznain666/SchoolHubWebsite — branch `main`,
+tracking `origin/main`. The repo root is this folder, not the parent (the
+parent holds loose design files that are deliberately not committed).
+`node_modules/` and `dist/` are git-ignored. The user's terminal is Windows
+PowerShell 5.1: give them `;`-chained commands, never `&&`.
+
 Stack: **Vite 5 · React 18 · TypeScript (strict) · Tailwind v3 · Framer Motion ·
 Lenis · three.js + @react-three/fiber + drei + postprocessing**. Fonts are
 self-hosted via `@fontsource`. **Nothing is fetched from a CDN at runtime** —
@@ -419,4 +425,8 @@ and the `syncFromScroll` guard (the two halves of the jerky/ballooning bot),
 Messaging and Performance moved to the four-row `DetailList`, frosted-pill
 header off the hero, `hello@getschoolhub.com` and Karachi everywhere, hero chips
 to Academics/Admin/Accounts/HR/Parents/Students, and the 3D bot enabled on
-phones with a full mobile type/tap-target pass.
+phones with a full mobile type/tap-target pass. Same day: project put under
+git and pushed to GitHub (see §1).
+
+⚠ `Bot images/2.jpg`, `4.jpg` and `7.jpg` are saved HTML pages, not JPEGs —
+failed downloads. Nothing in `src/` references them; replace or delete.
