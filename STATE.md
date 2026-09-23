@@ -30,7 +30,15 @@ npm run lint       # eslint --max-warnings 0
 **Repository:** https://github.com/Haznain666/SchoolHubWebsite — branch `main`,
 tracking `origin/main`. The repo root is this folder, not the parent (the
 parent holds loose design files that are deliberately not committed).
-`node_modules/` and `dist/` are git-ignored. The user's terminal is Windows
+`node_modules/` and `dist/` are git-ignored.
+
+**Live:** https://getschoolhub.com on Hostinger, via hPanel → Advanced → GIT
+(auto-deployment into `public_html`). Hostinger copies files verbatim and does
+**not** build, so it must track the **`deploy`** branch, never `main` —
+deploying `main` serves the source `index.html` pointing at `/src/main.tsx` and
+the page is blank. `.github/workflows/deploy.yml` builds on every push to `main`
+and force-pushes `dist/` to `deploy`. Ship = push to `main`, wait for the
+Action, then Hostinger auto-deploys. The user's terminal is Windows
 PowerShell 5.1: give them `;`-chained commands, never `&&`.
 
 Stack: **Vite 5 · React 18 · TypeScript (strict) · Tailwind v3 · Framer Motion ·
