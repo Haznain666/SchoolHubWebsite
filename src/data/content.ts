@@ -292,8 +292,8 @@ export const contact = {
   lead: 'Tell us about your school in a few questions. We will come back to you personally — with an honest assessment, not a standard quote.',
   smallPrint: 'Takes about 60 seconds.',
   thanks: 'Thank you — we will be in touch',
-  thanksBody:
-    'This is a preview form, so nothing has been sent yet. Use Book a Demo, or write to us directly, and a person will answer.',
+  thanksBody: 'Your details are with us, and a person will answer shortly.',
+  sendError: 'That did not go through. Please try again in a moment.',
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -307,7 +307,6 @@ export const footer = {
     { label: 'LinkedIn', glyph: 'linkedin', href: 'https://www.linkedin.com' },
     { label: 'X', glyph: 'x', href: 'https://x.com' },
     { label: 'YouTube', glyph: 'youtube', href: 'https://www.youtube.com' },
-    { label: 'Email', glyph: 'mail', href: 'mailto:hello@getschoolhub.com' },
   ],
   columns: [
     {
@@ -336,7 +335,6 @@ export const footer = {
     {
       title: 'Contact',
       links: [
-        { label: 'hello@getschoolhub.com', href: 'mailto:hello@getschoolhub.com' },
         { label: 'Book a demo', href: '#contact' },
       ],
     },

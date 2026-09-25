@@ -2,7 +2,7 @@ import { BookDemo, LoginLink } from '../components/Cta';
 import { ContactForm } from '../components/ContactForm';
 import { Eyebrow, Scene, SceneHeading, SceneItem, SceneLead } from '../components/Scene';
 import { contact } from '../data/content';
-import { LINKS, sectionById } from '../data/sections';
+import { sectionById } from '../data/sections';
 
 const meta = sectionById('contact');
 
@@ -26,17 +26,6 @@ export function Contact() {
       </SceneItem>
       <SceneItem>
         <ContactForm />
-      </SceneItem>
-      <SceneItem>
-        <p className="body-copy mt-4 text-[0.78rem] text-steel-700">
-          Or write to us directly:{' '}
-          <a
-            href={`mailto:${LINKS.email}`}
-            className="text-ink underline decoration-steel-300 underline-offset-4 transition-colors duration-300 hover:decoration-accent"
-          >
-            {LINKS.email}
-          </a>
-        </p>
       </SceneItem>
     </Scene>
   );

@@ -40,13 +40,6 @@ function Glyph({ name }: { name: string }) {
           <path d="M8.4 8.2v3.6L11.7 10z" fill="#fff" />
         </g>
       );
-    case 'mail':
-      return (
-        <g {...stroke}>
-          <rect x="3" y="5.4" width="14" height="9.2" rx="1.6" />
-          <path d="m3.6 6.4 6.4 4.4 6.4-4.4" />
-        </g>
-      );
     case 'flow':
       return (
         <g {...stroke}>

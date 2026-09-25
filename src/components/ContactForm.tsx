@@ -44,14 +44,16 @@ const EMPTY: Record<Field, string> = {
 };
 
 /**
- * INERT by design: it validates on the client, then shows a thank-you state.
- * Nothing is posted anywhere.
+ * Validates on the client, then posts to /contact.php, which emails the
+ * details to the School Hub inbox.
  */
 export function ContactForm() {
   const base = useId();
   const [values, setValues] = useState<Record<Field, string>>(EMPTY);
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [sum, setSum] = useState<Sum>(makeSum);
 
   const validate = (): boolean => {
@@ -79,9 +81,34 @@ export function ContactForm() {
     return Object.keys(next).length === 0;
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // nothing is ever sent
-    if (validate()) setSent(true);
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (sending || !validate()) return;
+    const website = (new FormData(e.currentTarget).get('website') as string | null) ?? '';
+    setSending(true);
+    setFailed(false);
+    try {
+      const res = await fetch('/contact.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: values.name,
+          school: values.school,
+          email: values.email,
+          phone: values.phone,
+          campuses: values.campuses,
+          website,
+        }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setSent(true);
+    } catch {
+      setFailed(true);
+      setSum(makeSum());
+      setValues((v) => ({ ...v, captcha: '' }));
+    } finally {
+      setSending(false);
+    }
   };
 
   if (sent) {
@@ -106,6 +133,15 @@ export function ContactForm() {
 
   return (
     <form className="panel mt-8 p-5" onSubmit={onSubmit} noValidate>
+      {/* honeypot: hidden from people and screen readers, filled in by bots */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-px w-px opacity-0"
+      />
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {FIELDS.map((f) => {
           const id = `${base}-${f.key}`;
@@ -165,14 +201,19 @@ export function ContactForm() {
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-5">
-        <button type="submit" className="cta-primary">
-          Send the details
+        <button type="submit" className="cta-primary" disabled={sending} aria-busy={sending}>
+          {sending ? 'Sending…' : 'Send the details'}
           <span className="cta-arrow" aria-hidden="true">
             →
           </span>
         </button>
         <p className="body-copy text-[0.7rem] text-steel-700">{contact.smallPrint}</p>
       </div>
+      {failed ? (
+        <p role="alert" className="body-copy mt-3 text-[0.75rem] text-brand-blue">
+          {contact.sendError}
+        </p>
+      ) : null}
     </form>
   );
 }

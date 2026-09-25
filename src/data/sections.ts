@@ -473,9 +473,8 @@ export const sectionById = (id: SectionId): SectionMeta =>
 
 /** External / anchor targets used by the CTAs and the keyboard shortcuts. */
 export const LINKS = {
-  login: 'https://schoolhub.codexmill.com/login',
+  login: 'https://app.getschoolhub.com',
   demo: '#contact',
-  email: 'hello@getschoolhub.com',
   portal: 'https://schoolhub.codexmill.com',
   superAdmin: 'https://schoolhub.codexmill.com/super-admin',
   status: 'https://schoolhub.codexmill.com/status',

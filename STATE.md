@@ -13,8 +13,8 @@ rather than open it.
 ## 1. What this is
 
 A single-page marketing site for **School Hub**, a multi-tenant school
-management SaaS for Pakistani schools. Marketing only: no backend, no database,
-no auth, no analytics. The contact form is inert by design.
+management SaaS for Pakistani schools. Marketing only: no database, no auth, no
+analytics. The one backend piece is `public/contact.php` (see §3a).
 
 **Project root:** `D:\School-Management-Website\School-Management-Website\schoolhub-website`
 
@@ -85,6 +85,28 @@ wrong, not the code.
 2. **Every person named anywhere is Western.** Alex Morgan, John Carter, Mike
    Bennett, Emily Hart, Sarah Whitfield, Daniel Reed, Laura Finch. Never copy
    names or figures from the live Askari tenant — those are real students.
+
+### 3a. Contact form, email and Login (2026-09-26)
+
+- **Login** (header, mobile menu, contact section, `L` key) goes to
+  `https://app.getschoolhub.com` — `LINKS.login` in `src/data/sections.ts`.
+- **`hello@getschoolhub.com` must not appear anywhere in the page** (spam
+  harvesting). It was removed from the contact section ("Or write to us
+  directly"), the footer's Contact column and Email social icon, and the four
+  legal pages, which now say "use the contact form on our homepage".
+  `LINKS.email` no longer exists. Check with
+  `Select-String -Path dist\*.html,dist\assets\*.js -Pattern "hello@"` after a build.
+- **The form posts JSON to `/contact.php`**, which lives in `public/` so Vite
+  copies it into `dist/` and it deploys with the site. It re-validates, drops
+  anything with the hidden `website` honeypot filled, strips control
+  characters (header-injection guard) and sends with PHP `mail()` to
+  `hello@getschoolhub.com`, `Reply-To` the visitor. The address exists only in
+  that server-side file. A non-2xx response shows `contact.sendError` and
+  issues a fresh sum. **The Vite dev server does not run PHP** — a POST there
+  returns 200 and fakes success, so test real delivery on the live site only.
+  If mail does not arrive, check that the `hello@getschoolhub.com` mailbox
+  exists in Hostinger (the `From`/`-f` address must be a real mailbox on the
+  domain) and look in spam.
 
 ---
 
@@ -428,7 +450,9 @@ Build, typecheck and lint all clean; `verify-presets.py` **PASS 13/13**. Main
 bundle 213 kB (67 kB gzip); three.js split into the lazy 955 kB `BotCanvas`
 chunk (264 kB gzip). No external network requests.
 
-**Last updated:** 2026-09-24 — `changes.pdf` round: orbit-space camera damping
+**Last updated:** 2026-09-26 — Login → app.getschoolhub.com; public email
+address removed site-wide; contact form now emails via `public/contact.php`
+(§3a). Previously 2026-09-24 — `changes.pdf` round: orbit-space camera damping
 and the `syncFromScroll` guard (the two halves of the jerky/ballooning bot),
 Messaging and Performance moved to the four-row `DetailList`, frosted-pill
 header off the hero, `hello@getschoolhub.com` and Karachi everywhere, hero chips

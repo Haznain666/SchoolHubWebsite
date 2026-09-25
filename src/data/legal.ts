@@ -26,7 +26,7 @@ export interface LegalDoc {
   sections: readonly LegalSection[];
 }
 
-const CONTACT = 'hello@getschoolhub.com';
+const CONTACT = 'the contact form on our homepage';
 const UPDATED = '23 September 2026';
 
 export const privacy: LegalDoc = {
@@ -93,7 +93,7 @@ export const privacy: LegalDoc = {
     {
       heading: 'Contact',
       paragraphs: [
-        `Questions about this policy, or a request about a record: ${CONTACT}. If you are asking on behalf of a school, say which school.`,
+        `Questions about this policy, or a request about a record: use ${CONTACT}. If you are asking on behalf of a school, say which school.`,
       ],
     },
   ],
@@ -171,7 +171,7 @@ export const terms: LegalDoc = {
     },
     {
       heading: 'Contact',
-      paragraphs: [`Questions about these terms: ${CONTACT}.`],
+      paragraphs: [`Questions about these terms: use ${CONTACT}.`],
     },
   ],
 };
@@ -223,7 +223,7 @@ export const copyright: LegalDoc = {
     {
       heading: 'Reporting infringement',
       paragraphs: [
-        `If you believe something here infringes your copyright, write to ${CONTACT} with a description of the work, where it appears, and how to reach you. We will look into it promptly.`,
+        `If you believe something here infringes your copyright, use ${CONTACT} with a description of the work, where it appears, and how to reach you. We will look into it promptly.`,
       ],
     },
   ],
@@ -272,7 +272,7 @@ export const cookies: LegalDoc = {
     },
     {
       heading: 'Contact',
-      paragraphs: [`Questions: ${CONTACT}.`],
+      paragraphs: [`Questions: use ${CONTACT}.`],
     },
   ],
 };
