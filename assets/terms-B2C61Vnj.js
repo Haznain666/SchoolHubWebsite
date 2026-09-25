@@ -1,0 +1,1 @@
+import{c as t,j as e,R as o}from"./asset-Cul4KB1P.js";import{L as r,t as s}from"./legal-BvkWyVOw.js";t.createRoot(document.getElementById("root")).render(e.jsx(o.StrictMode,{children:e.jsx(r,{doc:s})}));
